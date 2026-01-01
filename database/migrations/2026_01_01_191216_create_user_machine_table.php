@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('user_machines', function (Blueprint $table) {
-            $table->id();
+        Schema::create('user_machine', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('machine_id')->constrained('machines')->restrictOnDelete();
             $table->foreignId('nozzle_id')->constrained('nozzles')->restrictOnDelete();
