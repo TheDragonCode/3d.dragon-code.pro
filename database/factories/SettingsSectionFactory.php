@@ -15,7 +15,8 @@ class SettingsSectionFactory extends Factory
     public function definition(): array
     {
         return [
-            'title'      => $this->faker->word(),
+            'key' => $this->faker->unique()->word(),
+
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

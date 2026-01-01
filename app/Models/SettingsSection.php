@@ -8,14 +8,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use LaravelLang\Models\HasTranslations;
 
 class SettingsSection extends Model
 {
+    use HasTranslations;
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'parent_id',
-        'title',
+
+        'key',
     ];
 
     public function parent(): Relation
