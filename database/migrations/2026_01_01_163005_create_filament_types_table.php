@@ -9,14 +9,10 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('filaments', function (Blueprint $table): void {
+        Schema::create('filament_types', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('vendor_id')->constrained('vendors')->restrictOnDelete();
-            $table->foreignId('filament_type_id')->constrained('filament_types')->restrictOnDelete();
-
-            $table->string('slug')->unique();
-            $table->string('title');
+            $table->string('title')->unique();
 
             $table->timestamps();
             $table->softDeletes();
