@@ -12,7 +12,6 @@
         "@PHP8x2Migration": true,
         "@PHP8x3Migration": true,
         "@PHP8x4Migration": true,
-        "@PHP8x5Migration": true,
         "concat_space": {
             "spacing": "one"
         },

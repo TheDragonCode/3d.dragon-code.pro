@@ -8,7 +8,7 @@
         "framework"
     ],
     "require": {
-        "php": "^8.5",
+        "php": "^8.4",
         "dragon-code/laravel-deploy-operations": "^7.1",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^12.0",
@@ -51,7 +51,7 @@
     "scripts": {
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
-            "vendor/bin/codestyle pint 8.5",
+            "vendor/bin/codestyle pint 8.4",
             "vendor/bin/codestyle rector laravel",
             "vendor/bin/codestyle editorconfig",
             "vendor/bin/codestyle npm",

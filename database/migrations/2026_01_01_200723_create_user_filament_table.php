@@ -11,7 +11,7 @@ return new class extends Migration {
     {
         Schema::create('user_filament', function (Blueprint $table): void {
             $table->id();
-            
+
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('machine_id')->constrained('machines')->restrictOnDelete();
             $table->foreignId('filament_id')->constrained('filaments')->restrictOnDelete();
