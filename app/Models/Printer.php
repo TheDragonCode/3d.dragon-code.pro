@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Casts\SlugCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Printer extends Model
@@ -23,5 +24,10 @@ class Printer extends Model
         return [
             'slug' => SlugCast::class,
         ];
+    }
+
+    public function vendor(): Relation
+    {
+        return $this->belongsTo(Vendor::class);
     }
 }

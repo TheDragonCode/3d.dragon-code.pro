@@ -12,6 +12,8 @@ return new class extends Migration {
         Schema::create('printers', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId('vendor_id')->constrained('vendors')->restrictOnDelete();
+
             $table->string('slug')->unique();
             $table->string('title');
 
