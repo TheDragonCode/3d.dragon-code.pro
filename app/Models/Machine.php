@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\SlugCast;
+use App\Events\SluggableEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -17,6 +18,10 @@ class Machine extends Model
     protected $fillable = [
         'slug',
         'title',
+    ];
+
+    protected $dispatchesEvents = [
+        'saving' => SluggableEvent::class,
     ];
 
     protected function casts(): array

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -31,5 +32,19 @@ class User extends Authenticatable implements MustVerifyEmail
 
             'password' => 'hashed',
         ];
+    }
+
+    public function machines(): BelongsToMany
+    {
+        return $this->belongsToMany(Machine::class, 'user_machine')
+            ->using(UserMachine::class)
+            ->withTimestamps();
+    }
+
+    public function filaments(): BelongsToMany
+    {
+        return $this->belongsToMany(Filament::class, 'user_filament')
+            ->using(UserFilament::class)
+            ->withTimestamps();
     }
 }
