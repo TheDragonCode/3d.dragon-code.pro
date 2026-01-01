@@ -12,8 +12,8 @@ use LaravelLang\Models\HasTranslations;
 
 class SettingsSection extends Model
 {
-    use HasTranslations;
     use HasFactory, SoftDeletes;
+    use HasTranslations;
 
     protected $fillable = [
         'parent_id',

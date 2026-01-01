@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\Printer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 class PrinterFactory extends Factory
 {
-    protected $model = Printer::class;
-
     public function definition(): array
     {
         return [
