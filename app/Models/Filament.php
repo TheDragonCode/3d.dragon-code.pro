@@ -15,6 +15,9 @@ class Filament extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'vendor_id',
+        'filament_type_id',
+
         'slug',
         'title',
     ];
@@ -29,5 +32,10 @@ class Filament extends Model
     public function vendor(): Relation
     {
         return $this->belongsTo(Vendor::class);
+    }
+
+    public function type(): Relation
+    {
+        return $this->belongsTo(FilamentType::class);
     }
 }
