@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('printers', function (Blueprint $table) {
+        Schema::create('printers', function (Blueprint $table): void {
             $table->id();
 
             $table->foreignId('vendor_id')->constrained('vendors')->restrictOnDelete();

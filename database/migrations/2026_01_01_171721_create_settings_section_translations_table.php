@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('settings_section_translations', function (Blueprint $table) {
+        Schema::create('settings_section_translations', function (Blueprint $table): void {
             $table->id();
 
             $table->foreignId('item_id')
