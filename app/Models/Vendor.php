@@ -28,7 +28,7 @@ class Vendor extends Model
 
     public function printers(): Relation
     {
-        return $this->hasMany(Printer::class);
+        return $this->hasMany(Machine::class);
     }
 
     public function filaments(): Relation
