@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('layer_heights', function (Blueprint $table) {
+        Schema::create('layer_heights', function (Blueprint $table): void {
             $table->id();
 
             $table->string('slug')->unique();

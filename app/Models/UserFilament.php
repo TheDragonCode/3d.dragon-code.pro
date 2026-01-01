@@ -14,23 +14,39 @@ class UserFilament extends Pivot
 
     protected $fillable = [
         'user_id',
+        'machine_id',
         'filament_id',
 
-        'nozzle_temp_first_layer',
-        'nozzle_temp_other_layers',
+        'pressure_advance',
 
-        'cool_plate_temp_first_layer',
-        'cool_plate_temp_other_layers',
+        'filament_flow_ratio',
+        'filament_max_volumetric_speed',
 
-        'pei_plate_temp_first_layer',
-        'pei_plate_temp_other_layers',
-
-        'max_volumetric_speed',
+        'nozzle_temperature',
+        'nozzle_temperature_initial_layer',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'pressure_advance' => 'float',
+
+            'filament_flow_ratio'           => 'float',
+            'filament_max_volumetric_speed' => 'float',
+
+            'nozzle_temperature'               => 'int',
+            'nozzle_temperature_initial_layer' => 'int',
+        ];
+    }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function machine(): BelongsTo
+    {
+        return $this->belongsTo(Machine::class);
     }
 
     public function filament(): BelongsTo

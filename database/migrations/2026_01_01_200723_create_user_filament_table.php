@@ -9,20 +9,18 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('user_filament', function (Blueprint $table) {
+        Schema::create('user_filament', function (Blueprint $table): void {
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
+            $table->foreignId('machine_id')->constrained('machines')->restrictOnDelete();
             $table->foreignId('filament_id')->constrained('filaments')->restrictOnDelete();
 
-            $table->integer('nozzle_temp_first_layer');
-            $table->integer('nozzle_temp_other_layers');
+            $table->decimal('pressure_advance', 6, 4);
 
-            $table->integer('cool_plate_temp_first_layer');
-            $table->integer('cool_plate_temp_other_layers');
+            $table->decimal('filament_flow_ratio', 5, 3);
+            $table->decimal('filament_max_volumetric_speed', 4);
 
-            $table->integer('pei_plate_temp_first_layer');
-            $table->integer('pei_plate_temp_other_layers');
-
-            $table->decimal('max_volumetric_speed', 4);
+            $table->integer('nozzle_temperature');
+            $table->integer('nozzle_temperature_initial_layer');
 
             $table->timestamps();
         });
