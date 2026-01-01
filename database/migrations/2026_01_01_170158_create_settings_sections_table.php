@@ -9,15 +9,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('printers', function (Blueprint $table) {
+        Schema::create('settings_sections', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('vendor_id')->constrained('vendors')->restrictOnDelete();
+            $table->bigInteger('parent_id')->nullable();
 
-            $table->string('slug')->unique();
             $table->string('title');
-
-            $table->string('image')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
