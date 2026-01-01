@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('filament_types', function (Blueprint $table) {
+        Schema::create('filament_types', function (Blueprint $table): void {
             $table->id();
 
             $table->string('title')->unique();

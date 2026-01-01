@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Filament;
+use App\Models\Machine;
 use App\Models\User;
 use DragonCode\LaravelDeployOperations\Operation;
 
@@ -11,109 +12,91 @@ return new class extends Operation {
         [
             'filament' => 'Bambu Lab PETG HF Yellow',
 
-            'nozzle_temp_first_layer'  => 235,
-            'nozzle_temp_other_layers' => 235,
+            'nozzle_temperature_initial_layer' => 235,
+            'nozzle_temperature'               => 235,
 
-            'cool_plate_temp_first_layer'  => 70,
-            'cool_plate_temp_other_layers' => 70,
+            'pressure_advance' => 0.0701,
 
-            'pei_plate_temp_first_layer'  => 70,
-            'pei_plate_temp_other_layers' => 70,
-
-            'max_volumetric_speed' => 24,
+            'filament_flow_ratio'           => 1.045,
+            'filament_max_volumetric_speed' => 24,
         ],
         [
             'filament' => 'BestFilament PETG Green',
 
-            'nozzle_temp_first_layer'  => 245,
-            'nozzle_temp_other_layers' => 245,
+            'nozzle_temperature_initial_layer' => 245,
+            'nozzle_temperature'               => 245,
 
-            'cool_plate_temp_first_layer'  => 60,
-            'cool_plate_temp_other_layers' => 60,
+            'pressure_advance' => 0.092,
 
-            'pei_plate_temp_first_layer'  => 80,
-            'pei_plate_temp_other_layers' => 80,
-
-            'max_volumetric_speed' => 15,
+            'filament_flow_ratio'           => 0.9975,
+            'filament_max_volumetric_speed' => 15,
         ],
         [
             'filament' => 'BestFilament PETG Blue',
 
-            'nozzle_temp_first_layer'  => 245,
-            'nozzle_temp_other_layers' => 245,
+            'nozzle_temperature_initial_layer' => 245,
+            'nozzle_temperature'               => 245,
 
-            'cool_plate_temp_first_layer'  => 60,
-            'cool_plate_temp_other_layers' => 60,
+            'pressure_advance' => 0.0764,
 
-            'pei_plate_temp_first_layer'  => 80,
-            'pei_plate_temp_other_layers' => 80,
-
-            'max_volumetric_speed' => 20,
+            'filament_flow_ratio'           => 0.9971,
+            'filament_max_volumetric_speed' => 20,
         ],
         [
             'filament' => 'Creality PETG-HS Grey',
 
-            'nozzle_temp_first_layer'  => 220,
-            'nozzle_temp_other_layers' => 220,
+            'nozzle_temperature_initial_layer' => 220,
+            'nozzle_temperature'               => 220,
 
-            'cool_plate_temp_first_layer'  => 55,
-            'cool_plate_temp_other_layers' => 55,
+            'pressure_advance' => 0.0485,
 
-            'pei_plate_temp_first_layer'  => 50,
-            'pei_plate_temp_other_layers' => 50,
-
-            'max_volumetric_speed' => 23,
+            'filament_flow_ratio'           => 0.9912,
+            'filament_max_volumetric_speed' => 23,
         ],
         [
             'filament' => 'Creality PETG-HS White',
 
-            'nozzle_temp_first_layer'  => 220,
-            'nozzle_temp_other_layers' => 220,
+            'nozzle_temperature_initial_layer' => 220,
+            'nozzle_temperature'               => 220,
 
-            'cool_plate_temp_first_layer'  => 55,
-            'cool_plate_temp_other_layers' => 55,
+            'pressure_advance' => 0.0672,
 
-            'pei_plate_temp_first_layer'  => 50,
-            'pei_plate_temp_other_layers' => 50,
-
-            'max_volumetric_speed' => 22,
+            'filament_flow_ratio'           => 0.972,
+            'filament_max_volumetric_speed' => 22,
         ],
         [
             'filament' => 'Geetech PLA Silk Gold',
 
-            'nozzle_temp_first_layer'  => 222,
-            'nozzle_temp_other_layers' => 222,
+            'nozzle_temperature_initial_layer' => 222,
+            'nozzle_temperature'               => 222,
 
-            'cool_plate_temp_first_layer'  => 65,
-            'cool_plate_temp_other_layers' => 65,
+            'pressure_advance' => 0.0598,
 
-            'pei_plate_temp_first_layer'  => 65,
-            'pei_plate_temp_other_layers' => 65,
-
-            'max_volumetric_speed' => 10,
+            'filament_flow_ratio'           => 0.9668,
+            'filament_max_volumetric_speed' => 10,
         ],
         [
             'filament' => 'Syntech PETG Blue',
 
-            'nozzle_temp_first_layer'  => 240,
-            'nozzle_temp_other_layers' => 240,
+            'nozzle_temperature_initial_layer' => 240,
+            'nozzle_temperature'               => 240,
 
-            'cool_plate_temp_first_layer'  => 60,
-            'cool_plate_temp_other_layers' => 60,
+            'pressure_advance' => 0.0876,
 
-            'pei_plate_temp_first_layer'  => 70,
-            'pei_plate_temp_other_layers' => 70,
-
-            'max_volumetric_speed' => 16.5,
+            'filament_flow_ratio'           => 0.9975,
+            'filament_max_volumetric_speed' => 16.5,
         ],
     ];
 
     public function __invoke(): void
     {
-        $user = $this->user();
+        $user    = $this->user();
+        $machine = $this->machine();
 
         foreach ($this->items as $item) {
             $filament = $this->filament($item['filament']);
+
+            $item['machine_id'] = $machine->id;
 
             $this->store($user, $filament, $item);
         }
@@ -132,5 +115,10 @@ return new class extends Operation {
     protected function filament(string $title): Filament
     {
         return Filament::firstWhere(['title' => $title]);
+    }
+
+    protected function machine(): Machine
+    {
+        return Machine::firstOrFail();
     }
 };

@@ -7,14 +7,11 @@ namespace Database\Factories;
 use App\Models\Machine;
 use App\Models\Nozzle;
 use App\Models\User;
-use App\Models\UserMachine;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 class UserMachineFactory extends Factory
 {
-    protected $model = UserMachine::class;
-
     public function definition(): array
     {
         return [

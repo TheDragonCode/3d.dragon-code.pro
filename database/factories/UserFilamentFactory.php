@@ -6,14 +6,11 @@ namespace Database\Factories;
 
 use App\Models\Filament;
 use App\Models\User;
-use App\Models\UserFilament;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 class UserFilamentFactory extends Factory
 {
-    protected $model = UserFilament::class;
-
     public function definition(): array
     {
         return [
