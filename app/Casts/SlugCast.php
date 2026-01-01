@@ -8,6 +8,8 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+use function is_numeric;
+
 class SlugCast implements CastsAttributes
 {
     public function get(Model $model, string $key, mixed $value, array $attributes): string
@@ -17,6 +19,10 @@ class SlugCast implements CastsAttributes
 
     public function set(Model $model, string $key, mixed $value, array $attributes): string
     {
+        if (is_numeric($value)) {
+            return $value;
+        }
+
         return Str::of($value)->squish()->slug()->toString();
     }
 }
