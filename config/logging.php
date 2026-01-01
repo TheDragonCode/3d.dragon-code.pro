@@ -81,8 +81,8 @@ return [
             'handler_with' => [
                 'stream' => 'php://stderr',
             ],
-            'formatter'  => env('LOG_STDERR_FORMATTER'),
-            'processors' => [PsrLogMessageProcessor::class],
+            'formatter'    => env('LOG_STDERR_FORMATTER'),
+            'processors'   => [PsrLogMessageProcessor::class],
         ],
 
         'syslog' => [
@@ -104,11 +104,15 @@ return [
         ],
 
         'deprecations' => [
-            'path' => storage_path('logs/deprecations.log'),
+            'driver' => 'single',
+            'path'   => storage_path('logs/deprecations.log'),
+            'level'  => env('LOG_LEVEL', 'debug'),
         ],
 
         'emergency' => [
-            'path' => storage_path('logs/emergency.log'),
+            'driver' => 'single',
+            'path'   => storage_path('logs/emergency.log'),
+            'level'  => env('LOG_LEVEL', 'debug'),
         ],
 
     ],
