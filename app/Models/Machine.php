@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Printer extends Model
+class Machine extends Model
 {
     use HasFactory, SoftDeletes;
 
