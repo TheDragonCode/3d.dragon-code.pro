@@ -16,9 +16,10 @@ class OrcaSlicerCommand extends Command
 
     public function handle(DownloadService $download, ImportService $import): void
     {
-        //$this->components->task('Clean up', fn () => $download->cleanup());
-        //$this->components->task('Download', fn () => $download->download());
-        //$this->components->task('Extract', fn () => $download->extract());
+        $this->components->task('Clean up', fn () => $download->cleanup());
+        $this->components->task('Download', fn () => $download->download());
+        $this->components->task('Extract', fn () => $download->extract());
+        $this->components->task('Release', fn () => $download->release());
         $this->components->task('Import profiles', fn () => $import->profiles());
     }
 }
