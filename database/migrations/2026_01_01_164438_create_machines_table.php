@@ -14,13 +14,15 @@ return new class extends Migration {
 
             $table->foreignId('vendor_id')->constrained('vendors')->restrictOnDelete();
 
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->string('title');
 
-            $table->string('image')->nullable();
+            $table->string('cover')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
+
+            $table->unique(['vendor_id', 'slug']);
         });
     }
 };

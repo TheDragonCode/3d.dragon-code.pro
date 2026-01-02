@@ -8,7 +8,9 @@ use DragonCode\LaravelDeployOperations\Operation;
 return new class extends Operation {
     protected array $values = [
         0.12,
+        0.16,
         0.2,
+        0.24,
     ];
 
     public function __invoke(): void
