@@ -19,6 +19,7 @@
         "dragon-code/codestyler": "^6.5",
         "fakerphp/faker": "^1.23",
         "laravel-lang/common": "^6.7",
+        "laravel/boost": "^1.8",
         "laravel/pint": "^1.24",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
@@ -55,7 +56,8 @@
             "vendor/bin/codestyle rector laravel",
             "vendor/bin/codestyle editorconfig",
             "vendor/bin/codestyle npm",
-            "composer normalize"
+            "composer normalize",
+            "php artisan boost:update"
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
