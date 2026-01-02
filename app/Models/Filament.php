@@ -18,7 +18,7 @@ class Filament extends Model
     protected $fillable = [
         'vendor_id',
         'filament_type_id',
-        'color_id',
+        'external_id',
 
         'slug',
         'title',
@@ -43,10 +43,5 @@ class Filament extends Model
     public function type(): Relation
     {
         return $this->belongsTo(FilamentType::class);
-    }
-
-    public function color(): Relation
-    {
-        return $this->belongsTo(Color::class);
     }
 }

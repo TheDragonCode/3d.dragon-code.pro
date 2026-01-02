@@ -14,7 +14,8 @@ return new class extends Migration {
 
             $table->foreignId('vendor_id')->constrained('vendors')->restrictOnDelete();
             $table->foreignId('filament_type_id')->constrained('filament_types')->restrictOnDelete();
-            $table->foreignId('color_id')->constrained('colors')->restrictOnDelete();
+
+            $table->string('external_id')->unique();
 
             $table->string('slug')->unique();
             $table->string('title');
