@@ -9,9 +9,9 @@ use Illuminate\Console\Command;
 
 class DownloadOrcaSlicerCommand extends Command
 {
-    protected $signature = 'download:orca-slicer';
+    protected $signature = 'orca-slicer:download';
 
-    protected $description = 'Command description';
+    protected $description = 'Loading and unpacking OrcaSlicer resources';
 
     public function handle(DownloadService $service): void
     {
