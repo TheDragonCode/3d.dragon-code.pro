@@ -24,21 +24,9 @@ jobs:
                     php-version: 8.4
                     extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_pgsql
 
-            -   name: Extract Version
-                id: app
-                run: |
-                    if [[ $GITHUB_REF == refs/tags/* ]]; then
-                        VERSION=${{ github.event.release.name }}
-
-                        echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-                    else
-                        echo "version=${GITHUB_SHA::8}" >> "$GITHUB_OUTPUT"
-                    fi
-
             -   name: Deploy
                 uses: deployphp/action@v1
                 env:
-                    APP_VERSION: ${{ steps.app.outputs.version }}
                     TELEGRAM_DEPLOY_TOKEN: ${{ secrets.TELEGRAM_DEPLOY_TOKEN }}
                     TELEGRAM_DEPLOY_CHAT_ID: ${{ secrets.TELEGRAM_DEPLOY_CHAT_ID }}
                 with:
