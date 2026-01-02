@@ -20,4 +20,9 @@ return new class extends Operation {
     {
         return app()->isProduction();
     }
+
+    public function needBefore(): bool
+    {
+        return false;
+    }
 };
