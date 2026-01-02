@@ -9,6 +9,7 @@
     ],
     "require": {
         "php": "^8.4",
+        "ext-zip": "*",
         "dragon-code/laravel-deploy-operations": "^7.1",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^12.0",
