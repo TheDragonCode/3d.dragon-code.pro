@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Services\OrcaSlicer\OrcaSlicerService;
+use App\Services\OrcaSlicer\DownloadService;
 use Illuminate\Console\Command;
 
 class DownloadOrcaSlicerCommand extends Command
@@ -13,7 +13,7 @@ class DownloadOrcaSlicerCommand extends Command
 
     protected $description = 'Command description';
 
-    public function handle(OrcaSlicerService $service): void
+    public function handle(DownloadService $service): void
     {
         $this->components->task('Clean up', fn () => $service->cleanup());
         $this->components->task('Download', fn () => $service->download());

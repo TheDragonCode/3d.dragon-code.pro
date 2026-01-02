@@ -13,7 +13,7 @@ use ZipArchive;
 
 use function dirname;
 
-class OrcaSlicerService
+class DownloadService
 {
     public function __construct(
         #[Storage('orca_slicer')]
