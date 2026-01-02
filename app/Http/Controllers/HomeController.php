@@ -12,7 +12,7 @@ class HomeController
     public function __invoke()
     {
         $settings = UserFilament::query()
-            ->with(['machine.vendor', 'filament'])
+            ->with(['machine.vendor', 'filament', 'color'])
             ->orderBy('machine_id')
             ->orderBy('filament_id')
             ->orderBy('id')

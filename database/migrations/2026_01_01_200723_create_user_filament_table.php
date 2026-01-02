@@ -15,6 +15,9 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('machine_id')->constrained('machines')->restrictOnDelete();
             $table->foreignId('filament_id')->constrained('filaments')->restrictOnDelete();
+            $table->foreignId('color_id')->constrained('colors')->restrictOnDelete();
+
+            $table->string('external_id');
 
             $table->decimal('pressure_advance', 6, 4);
 

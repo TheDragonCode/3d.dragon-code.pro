@@ -40,7 +40,8 @@ class FilamentTitleCast implements CastsAttributes
             ->replace('-wood', ' Wood', false)
             ->before('@')
             ->squish()
-            ->match('/[^\d]([A-Z]{2,4}[+\-\s]?([A-Z]{2,4}|Silk|Wood)?)/')
+            ->match('/([^\d][A-Z]{2,4}[+\-\s]?([A-Z]{2,4}|Silk|Wood)?)/')
+            ->replace(' CF', '-CF', false)
             ->squish()
             ->trim('-')
             ->toString();

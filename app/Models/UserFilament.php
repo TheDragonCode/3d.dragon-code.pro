@@ -16,6 +16,8 @@ class UserFilament extends Pivot
         'user_id',
         'machine_id',
         'filament_id',
+        'color_id',
+        'external_id',
 
         'pressure_advance',
 
@@ -52,5 +54,10 @@ class UserFilament extends Pivot
     public function filament(): BelongsTo
     {
         return $this->belongsTo(Filament::class);
+    }
+
+    public function color(): BelongsTo
+    {
+        return $this->belongsTo(Color::class);
     }
 }
