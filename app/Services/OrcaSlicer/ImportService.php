@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\OrcaSlicer;
 
+use App\Casts\FilamentTitleCast;
 use App\Data\OrcaSlicer\FilamentData;
 use App\Data\OrcaSlicer\MachineData;
 use App\Data\OrcaSlicer\ProfileData;
@@ -110,7 +111,16 @@ class ImportService
 
     protected function filamentType(string $name): FilamentType
     {
-        return $this->filamentTypes[$name] ??= FilamentType::firstOrCreate(['title' => $name]);
+        $cast = (new FilamentTitleCast)->set(new FilamentType, '', $name, []);
+
+        if ($model = $this->filamentTypes[$cast] ?? null) {
+            return $model;
+        }
+
+        $model = FilamentType::firstWhere('title', $cast)
+            ?: FilamentType::create(['title' => $name]);
+
+        return $this->filamentTypes[$cast] = $model;
     }
 
     protected function machine(string $name): ?Machine
