@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->id();
 
             $table->string('title')->unique();
+            $table->string('hex', 15)->nullable();
 
             $table->timestamps();
             $table->softDeletes();
