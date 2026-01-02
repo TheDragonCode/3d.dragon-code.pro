@@ -39,6 +39,8 @@ class TranslatorService
 
     protected function path(string $filename): string
     {
-        return $this->storage->path($this->directory . DIRECTORY_SEPARATOR . $filename);
+        return $this->storage->path(
+            $this->directory . DIRECTORY_SEPARATOR . $filename
+        );
     }
 }

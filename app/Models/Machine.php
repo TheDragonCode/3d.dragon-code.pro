@@ -18,6 +18,7 @@ class Machine extends Model
     protected $fillable = [
         'slug',
         'title',
+        'cover',
     ];
 
     protected $dispatchesEvents = [

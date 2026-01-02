@@ -3,6 +3,11 @@
 declare(strict_types=1);
 
 return [
+    'common' => [
+        'name'  => 'Common',
+        'email' => 'common@example.com',
+    ],
+
     'admin' => [
         'name'     => env('ADMIN_NAME'),
         'email'    => env('ADMIN_EMAIL'),

@@ -6,4 +6,8 @@ return [
     'archive' => 'orca-slicer.zip',
 
     'directory' => 'OrcaSlicer-main',
+
+    'except_files' => [
+        'blacklist.json',
+    ],
 ];
