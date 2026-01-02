@@ -16,7 +16,7 @@ return new class extends Operation {
     public function __invoke(): void
     {
         foreach ($this->values as $value) {
-            LayerHeight::create(['title' => $value]);
+            LayerHeight::updateOrCreate(['title' => $value]);
         }
     }
 };
