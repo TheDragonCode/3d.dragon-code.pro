@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace App\Services\OrcaSlicer;
 
+use App\Data\OrcaSlicer\FilamentData;
 use App\Data\OrcaSlicer\MachineData;
 use App\Data\OrcaSlicer\ProfileData;
+use App\Models\Filament;
+use App\Models\FilamentType;
+use App\Models\Machine;
 use App\Models\Nozzle;
+use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Container\Attributes\Config;
 use Illuminate\Container\Attributes\Storage;
@@ -16,12 +21,20 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use SplFileInfo;
 
+use function array_merge;
+use function config;
 use function file_get_contents;
 use function in_array;
 use function json_decode;
 
 class ImportService
 {
+    protected array $filamentTypes = [];
+
+    protected array $machines = [];
+
+    protected ?User $user;
+
     public function __construct(
         #[Storage('orca_slicer')]
         protected FilesystemAdapter $storage,
@@ -37,7 +50,7 @@ class ImportService
 
     public function profiles(): void
     {
-        foreach ($this->files() as $profile) {
+        foreach ($this->profileFiles() as $profile) {
             if ($this->needSkip($profile)) {
                 continue;
             }
@@ -51,6 +64,7 @@ class ImportService
             $vendor = $this->vendor($data->title);
 
             $this->machines($vendor, $data->machines);
+            $this->filaments($vendor, $data->filaments);
         }
     }
 
@@ -63,6 +77,47 @@ class ImportService
 
             $this->nozzles($machine->nozzleDiameters);
         });
+    }
+
+    protected function filaments(Vendor $vendor, Collection $items): void
+    {
+        $items->each(function (FilamentData $filament) use ($vendor) {
+            $type = $this->filamentType($filament->title);
+
+            $model = $vendor->filaments()->updateOrCreate([
+                'external_id' => $filament->settingId,
+            ], array_merge($filament->toArray(), ['filament_type_id' => $type->id]));
+
+            // TODO: Добавить
+            //$machine = $this->machine($filament->title);
+            //
+            //if (! $machine) {
+            //    dd(
+            //        $filament->toArray()
+            //    );
+            //
+            //    return;
+            //}
+            //
+            //$this->userFilament($this->commonUser(), $model, $filament);
+        });
+    }
+
+    protected function userFilament(User $user, Filament $filament, FilamentData $data): void
+    {
+        $user->filaments()->attach($filament, $data->toArray());
+    }
+
+    protected function filamentType(string $name): FilamentType
+    {
+        return $this->filamentTypes[$name] ??= FilamentType::firstOrCreate(['title' => $name]);
+    }
+
+    protected function machine(string $name): ?Machine
+    {
+        $name = Str::afterLast($name, '@');
+
+        return $this->machines[$name] ??= Machine::firstWhere('title', $name);
     }
 
     protected function nozzles(array $diameters): void
@@ -100,7 +155,7 @@ class ImportService
     /**
      * @return SplFileInfo[]
      */
-    protected function files(): array
+    protected function profileFiles(): array
     {
         return File::files(
             $this->getMachinesPath()
@@ -121,6 +176,11 @@ class ImportService
         $extension = $profile->getExtension();
 
         return Str::beforeLast($filename, ".$extension");
+    }
+
+    protected function commonUser(): User
+    {
+        return $this->user ??= User::firstWhere('email', config('user.common.email'));
     }
 
     protected function getMachinesPath(): string

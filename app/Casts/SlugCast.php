@@ -23,6 +23,6 @@ class SlugCast implements CastsAttributes
             return (string) $value;
         }
 
-        return Str::of($value)->squish()->slug()->toString();
+        return Str::of($value)->replace('+', '-plus-')->squish()->slug()->toString();
     }
 }
