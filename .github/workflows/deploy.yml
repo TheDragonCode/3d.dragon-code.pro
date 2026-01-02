@@ -33,4 +33,4 @@ jobs:
                     private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
                     known-hosts: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
                     dep: deploy production --revision=${{ github.sha }} -o provision_user=${{ secrets.DEPLOY_USERNAME }}
-                    deployer-version: 8.0.0-alpha.3
+                    deployer-version: 7.5.12
