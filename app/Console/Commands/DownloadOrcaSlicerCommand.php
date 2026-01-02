@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Services\OrcaSlicerService;
+use App\Services\OrcaSlicer\OrcaSlicerService;
 use Illuminate\Console\Command;
 
 class DownloadOrcaSlicerCommand extends Command
