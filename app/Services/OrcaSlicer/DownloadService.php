@@ -7,6 +7,7 @@ namespace App\Services\OrcaSlicer;
 use Illuminate\Container\Attributes\Config;
 use Illuminate\Container\Attributes\Storage;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 use ZipArchive;
@@ -29,7 +30,7 @@ class DownloadService
     public function download(): void
     {
         Http::timeout(120)
-            ->sink($this->path())
+            ->sink($this->path(false))
             ->throw()
             ->get($this->source)
             ->throw();
@@ -37,12 +38,14 @@ class DownloadService
 
     public function extract(): void
     {
-        $archive     = $this->path();
-        $destination = dirname($archive);
+        $archive     = $this->path(false);
+        $destination = dirname($this->path());
+
+        File::ensureDirectoryExists($destination);
 
         $zip = new ZipArchive;
 
-        if ($zip->open($this->path()) !== true) {
+        if ($zip->open($archive) !== true) {
             throw new RuntimeException('Unable to open archive: ' . $archive);
         }
 
@@ -55,19 +58,43 @@ class DownloadService
         $zip->close();
     }
 
-    public function cleanup(): void
+    public function release(): void
     {
-        if ($this->storage->exists($this->archive)) {
-            $this->storage->delete($this->archive);
-        }
+        $this->cleanup(false);
 
-        $this->storage->deleteDirectory($this->directory);
+        $this->storage->move(
+            'temp/' . $this->directory,
+            $this->directory
+        );
+
+        $this->cleanup();
     }
 
-    protected function path(): string
+    public function cleanup(bool $temp = true): void
+    {
+        $filename = $this->archiveFilename($temp);
+
+        if ($this->storage->exists($filename)) {
+            $this->storage->delete($filename);
+        }
+
+        $this->storage->deleteDirectory($this->tempPrefix($temp) . $this->directory);
+    }
+
+    protected function path(bool $temp = true): string
     {
         return $this->storage->path(
-            $this->archive
+            $this->archiveFilename($temp)
         );
+    }
+
+    protected function archiveFilename(bool $temp): string
+    {
+        return $this->tempPrefix($temp) . $this->archive;
+    }
+
+    protected function tempPrefix(bool $temp): string
+    {
+        return $temp ? 'temp/' : '';
     }
 }
