@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use Gettext\Loader\PoLoader;
 use Illuminate\Container\Attributes\Storage;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Http;
@@ -20,13 +21,14 @@ class OrcaSlicerService
 
     public function __construct(
         #[Storage('local')]
-        protected FilesystemAdapter $storage
+        protected FilesystemAdapter $storage,
+        protected PoLoader $translator
     ) {}
 
     public function download(): void
     {
         Http::timeout(120)
-            ->sink($this->path())
+            ->sink($this->archivePath())
             ->throw()
             ->get(static::SOURCE)
             ->throw();
@@ -34,12 +36,12 @@ class OrcaSlicerService
 
     public function extract(): void
     {
-        $archive     = $this->path();
+        $archive     = $this->archivePath();
         $destination = dirname($archive);
 
         $zip = new ZipArchive;
 
-        if ($zip->open($this->path()) !== true) {
+        if ($zip->open($this->archivePath()) !== true) {
             throw new RuntimeException('Unable to open archive: ' . $archive);
         }
 
@@ -61,8 +63,22 @@ class OrcaSlicerService
         $this->storage->deleteDirectory(static::DIRECTORY);
     }
 
-    protected function path(): string
+    public function translate(string $locale, string $value): string
+    {
+        $translations = $this->translator->loadFile(
+            $this->repositoryPath("localization/i18n/$locale/OrcaSlicer_$locale.po")
+        );
+
+        return $translations->find(null, $value)?->getTranslation() ?? $value;
+    }
+
+    protected function archivePath(): string
     {
         return $this->storage->path(static::ARCHIVE);
+    }
+
+    protected function repositoryPath(string $filename = ''): string
+    {
+        return $this->storage->path(static::DIRECTORY . DIRECTORY_SEPARATOR . $filename);
     }
 }
