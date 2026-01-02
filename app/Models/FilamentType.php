@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Casts\FilamentTitleCast;
+use App\Casts\FilamentTypeTitleCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,7 +20,7 @@ class FilamentType extends Model
     protected function casts(): array
     {
         return [
-            'title' => FilamentTitleCast::class,
+            'title' => FilamentTypeTitleCast::class,
         ];
     }
 }
