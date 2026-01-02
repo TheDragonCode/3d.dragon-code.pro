@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Casts\SlugCast;
-use App\Events\SluggableEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -20,20 +18,8 @@ class Filament extends Model
         'filament_type_id',
         'external_id',
 
-        'slug',
         'title',
     ];
-
-    protected $dispatchesEvents = [
-        'saving' => SluggableEvent::class,
-    ];
-
-    protected function casts(): array
-    {
-        return [
-            'slug' => SlugCast::class,
-        ];
-    }
 
     public function vendor(): Relation
     {
