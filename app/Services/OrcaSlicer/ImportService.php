@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use SplFileInfo;
 
-use function array_merge;
 use function config;
 use function file_get_contents;
 use function in_array;
@@ -86,8 +85,8 @@ class ImportService
             $type = $this->filamentType($filament->title);
 
             $model = $vendor->filaments()->updateOrCreate([
-                'external_id' => $filament->settingId,
-            ], array_merge($filament->toArray(), ['filament_type_id' => $type->id]));
+                'filament_type_id' => $type->id,
+            ], $filament->toArray());
 
             // TODO: Добавить
             //$machine = $this->machine($filament->title);

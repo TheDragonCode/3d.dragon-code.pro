@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Casts\FilamentTitleCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -17,17 +16,7 @@ class Filament extends Model
     protected $fillable = [
         'vendor_id',
         'filament_type_id',
-        'external_id',
-
-        'title',
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'title' => FilamentTitleCast::class,
-        ];
-    }
 
     public function vendor(): Relation
     {
@@ -36,6 +25,6 @@ class Filament extends Model
 
     public function type(): Relation
     {
-        return $this->belongsTo(FilamentType::class);
+        return $this->belongsTo(FilamentType::class, 'filament_type_id', 'id');
     }
 }

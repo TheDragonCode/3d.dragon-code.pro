@@ -15,14 +15,10 @@ return new class extends Migration {
             $table->foreignId('vendor_id')->constrained('vendors')->restrictOnDelete();
             $table->foreignId('filament_type_id')->constrained('filament_types')->restrictOnDelete();
 
-            $table->string('external_id');
-
-            $table->string('title');
-
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['vendor_id', 'external_id']);
+            $table->unique(['vendor_id', 'filament_type_id']);
         });
     }
 };
