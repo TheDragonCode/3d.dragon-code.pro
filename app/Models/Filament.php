@@ -16,6 +16,7 @@ class Filament extends Model
     protected $fillable = [
         'vendor_id',
         'filament_type_id',
+        'external_id',
     ];
 
     public function vendor(): Relation
