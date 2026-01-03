@@ -2,34 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Casts;
+namespace App\Concerns;
 
-use App\Exceptions\UnknownFilamentTypeException;
-use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\FilamentType;
 use Illuminate\Support\Str;
 
-use function report;
-
-class FilamentTypeTitleCast implements CastsAttributes
+trait WithFilaments
 {
-    public function get(Model $model, string $key, mixed $value, array $attributes): string
+    protected array $filamentTypes = [];
+
+    protected function filamentType(string $value): FilamentType
     {
-        return $value;
+        $normalized = $this->filamentTypeNormalize($value);
+
+        return $this->filamentTypes[$value] ??= FilamentType::firstOrCreate(['title' => $normalized]);
     }
 
-    public function set(Model $model, string $key, mixed $value, array $attributes): string
-    {
-        if ($title = $this->perform($value)) {
-            return $title;
-        }
-
-        report(new UnknownFilamentTypeException($value));
-
-        return 'Unknown';
-    }
-
-    protected function perform(string $value): string
+    protected function filamentTypeNormalize(string $value): string
     {
         return Str::of($value)
             ->replace(['Generic', 'Value'], '')
