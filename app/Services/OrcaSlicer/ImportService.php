@@ -27,6 +27,7 @@ use function file_get_contents;
 use function in_array;
 use function json_decode;
 
+/** @deprecated */
 class ImportService
 {
     protected array $filamentTypes = [];
