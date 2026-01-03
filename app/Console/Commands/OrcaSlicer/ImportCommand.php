@@ -24,10 +24,11 @@ class ImportCommand extends Command
         NozzleService $nozzle,
         FilamentTypeService $filament,
     ): void {
-        //$this->components->task('Clean up', fn () => $download->cleanup());
-        //$this->components->task('Download', fn () => $download->download());
-        //$this->components->task('Extract', fn () => $download->extract());
-        //$this->components->task('Release', fn () => $download->release());
+        $this->components->task('Clean up', fn () => $download->cleanup());
+        $this->components->task('Download', fn () => $download->download());
+        $this->components->task('Extract', fn () => $download->extract());
+        $this->components->task('Release', fn () => $download->release());
+
         $this->components->task('Import map', fn () => $map->import());
         $this->components->task('Import machines', fn () => $machine->import());
         $this->components->task('Import nozzles', fn () => $nozzle->import());
