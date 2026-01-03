@@ -8,4 +8,5 @@ enum SourceType: string
 {
     case Machine  = 'machine';
     case Filament = 'filament';
+    case Process  = 'process';
 }
