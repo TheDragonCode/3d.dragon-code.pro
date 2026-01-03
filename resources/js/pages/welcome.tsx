@@ -29,7 +29,7 @@ export default function Welcome({ userFilaments, machines, filamentTypes, colors
                                         </td>
 
                                         <td className="border border-gray-300 p-3 text-left text-gray-900 dark:border-gray-600 dark:text-gray-200">
-                                            <select name="machines" id="machine" className="w-full">
+                                            <select name="filamentTypes" id="filamentType" className="w-full">
                                                 <option value="0">- All -</option>
 
                                                 { filamentTypes.map((item) => (
@@ -39,7 +39,7 @@ export default function Welcome({ userFilaments, machines, filamentTypes, colors
                                         </td>
 
                                         <td className="border border-gray-300 p-3 text-left text-gray-900 dark:border-gray-600 dark:text-gray-200">
-                                            <select name="machines" id="machine" className="w-full">
+                                            <select name="colors" id="color" className="w-full">
                                                 <option value="0">- All -</option>
 
                                                 { colors.map((item) => (
