@@ -4,27 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\UserFilament;
+use App\Services\Pages\HomeService;
 use Inertia\Inertia;
 
 class HomeController
 {
-    public function __invoke()
+    public function __invoke(HomeService $home)
     {
-        $settings = UserFilament::query()
-            ->with([
-                'machine.vendor',
-                'filament' => ['vendor', 'type'],
-                'color',
-            ])
-            ->orderBy('machine_id')
-            ->orderBy('filament_id')
-            ->orderBy('color_id')
-            ->orderBy('id')
-            ->get();
-
         return Inertia::render('welcome', [
-            'settings' => $settings,
+            'userFilaments' => $home->userFilaments(),
+            'machines'      => $home->machines(),
+            'filamentTypes' => $home->filamentTypes(),
+            'colors'        => $home->colors(),
         ]);
     }
 }

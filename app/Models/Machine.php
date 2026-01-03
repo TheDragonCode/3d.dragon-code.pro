@@ -8,6 +8,7 @@ use App\Casts\SlugCast;
 use App\Events\SluggableEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -34,6 +35,11 @@ class Machine extends Model
 
     public function vendor(): Relation
     {
-        return $this->belongsTo(Vendor::class);
+        return $this->belongsTo(Vendor::class, 'vendor_id', 'id');
+    }
+
+    public function userFilament(): HasMany
+    {
+        return $this->hasMany(UserFilament::class);
     }
 }
