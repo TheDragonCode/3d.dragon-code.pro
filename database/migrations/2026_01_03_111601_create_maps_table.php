@@ -16,6 +16,7 @@ return new class extends Migration {
 
             $table->string('type');
 
+            $table->string('profile');
             $table->string('key');
             $table->string('path');
 

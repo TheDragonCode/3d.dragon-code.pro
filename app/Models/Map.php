@@ -12,6 +12,8 @@ class Map extends Model
 {
     protected $fillable = [
         'type',
+        'profile',
+
         'key',
         'path',
     ];

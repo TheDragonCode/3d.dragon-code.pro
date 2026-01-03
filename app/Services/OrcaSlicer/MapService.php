@@ -95,7 +95,8 @@ class MapService
             'type' => $type,
             'key'  => $name,
         ], [
-            'path' => $profile . '/' . $path,
+            'profile' => $profile,
+            'path'    => $profile . '/' . $path,
         ]);
     }
 
