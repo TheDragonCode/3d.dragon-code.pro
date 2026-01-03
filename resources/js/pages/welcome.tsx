@@ -1,6 +1,79 @@
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
+import { type ChangeEvent, useEffect, useState } from 'react';
 
-export default function Welcome({ userFilaments, machines, filamentTypes, colors }) {
+type Machine = {
+    id: number;
+    title: string;
+    vendor: {
+        title: string;
+    };
+};
+
+type FilamentType = {
+    id: number;
+    title: string;
+};
+
+type Color = {
+    id: number;
+    title: string;
+};
+
+type UserFilament = {
+    machine_id: number;
+    filament_id: number;
+    color_id: number;
+    machine: Machine;
+    filament: {
+        vendor: {
+            title: string;
+        };
+        type: FilamentType;
+    };
+    color: Color;
+    pressure_advance: number;
+    filament_flow_ratio: number;
+    filament_max_volumetric_speed: number;
+    nozzle_temperature: number;
+    users_count: number;
+};
+
+type Filters = {
+    machine_id: number;
+    filament_type_id: number;
+    color_id: number;
+};
+
+type WelcomeProps = {
+    userFilaments: UserFilament[];
+    machines: Machine[];
+    filamentTypes: FilamentType[];
+    colors: Color[];
+    filters: Filters;
+};
+
+export default function Welcome({ userFilaments, machines, filamentTypes, colors, filters }: WelcomeProps) {
+    const [selectedFilters, setSelectedFilters] = useState<Filters>(filters);
+
+    useEffect(() => {
+        setSelectedFilters(filters);
+    }, [filters]);
+
+    const handleSelectChange = (key: keyof Filters) => (event: ChangeEvent<HTMLSelectElement>) => {
+        const value = Number(event.target.value);
+        const nextFilters: Filters = { ...selectedFilters, [key]: value };
+
+        setSelectedFilters(nextFilters);
+
+        router.visit('/', {
+            method: 'get',
+            data: nextFilters,
+            preserveState: true,
+            preserveScroll: true,
+            replace: true
+        });
+    };
+
     return (
             <>
                 <Head title="Welcome" />
@@ -19,31 +92,49 @@ export default function Welcome({ userFilaments, machines, filamentTypes, colors
                                     <tbody>
                                     <tr>
                                         <td className="border border-gray-300 p-3 text-left text-gray-900 dark:border-gray-600 dark:text-gray-200">
-                                            <select name="machines" className="w-full">
+                                            <select
+                                                    name="machines"
+                                                    className="w-full"
+                                                    onChange={ handleSelectChange('machine_id') }
+                                                    value={ selectedFilters.machine_id }>
                                                 <option value="0">- All -</option>
 
                                                 { machines.map((item) => (
-                                                        <option value={ item.id }>{ item.vendor.title }&nbsp;{ item.title }</option>
+                                                        <option
+                                                                key={ item.id }
+                                                                value={ item.id }>{ item.vendor.title }&nbsp;{ item.title }</option>
                                                 )) }
                                             </select>
                                         </td>
 
                                         <td className="border border-gray-300 p-3 text-left text-gray-900 dark:border-gray-600 dark:text-gray-200">
-                                            <select name="filamentTypes" className="w-full">
+                                            <select
+                                                    name="filamentTypes"
+                                                    className="w-full"
+                                                    onChange={ handleSelectChange('filament_type_id') }
+                                                    value={ selectedFilters.filament_type_id }>
                                                 <option value="0">- All -</option>
 
                                                 { filamentTypes.map((item) => (
-                                                        <option value={ item.id }>{ item.title }</option>
+                                                        <option
+                                                                key={ item.id }
+                                                                value={ item.id }>{ item.title }</option>
                                                 )) }
                                             </select>
                                         </td>
 
                                         <td className="border border-gray-300 p-3 text-left text-gray-900 dark:border-gray-600 dark:text-gray-200">
-                                            <select name="colors" className="w-full">
+                                            <select
+                                                    name="colors"
+                                                    className="w-full"
+                                                    onChange={ handleSelectChange('color_id') }
+                                                    value={ selectedFilters.color_id }>
                                                 <option value="0">- All -</option>
 
                                                 { colors.map((item) => (
-                                                        <option value={ item.id }>{ item.title }</option>
+                                                        <option
+                                                                key={ item.id }
+                                                                value={ item.id }>{ item.title }</option>
                                                 )) }
                                             </select>
                                         </td>
@@ -82,7 +173,7 @@ export default function Welcome({ userFilaments, machines, filamentTypes, colors
                                     </thead>
                                     <tbody>
                                     { userFilaments.map((item) => (
-                                            <tr>
+                                            <tr key={ `${ item.machine_id }-${ item.filament_id }-${ item.color_id }` }>
                                                 <td className="border border-gray-300 p-3 text-left text-gray-900 dark:border-gray-600 dark:text-gray-200">
                                                     { item.machine.vendor.title }&nbsp;
                                                     { item.machine.title }
