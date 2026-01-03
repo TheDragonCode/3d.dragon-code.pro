@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 class FilamentTypeServiceTest extends TestCase
 {
     #[DataProvider('detectCases')]
-    public function test_detect(string $input, ?string $expected): void
+    public function testDetect(string $input, ?string $expected): void
     {
         $service = new class extends FilamentTypeService {
             public function exposedDetect(string $value): ?string
