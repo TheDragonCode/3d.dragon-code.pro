@@ -6,6 +6,7 @@ namespace App\Services\OrcaSlicer;
 
 use App\Concerns\WithFilaments;
 use App\Enums\SourceType;
+use App\Models\Filament;
 use App\Models\Map;
 use App\Models\Vendor;
 use Illuminate\Support\Str;
@@ -116,7 +117,12 @@ class FilamentTypeService
             return;
         }
 
-        $this->filamentType($value);
+        $type = $this->filamentType($value);
+
+        Filament::updateOrCreate([
+            'vendor_id'        => $vendor->id,
+            'filament_type_id' => $type->id,
+        ]);
     }
 
     protected function detect(string $vendor, string $filament, string $path): string
