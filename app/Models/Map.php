@@ -6,12 +6,12 @@ namespace App\Models;
 
 use App\Enums\SourceType;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Map extends Model
 {
     protected $fillable = [
         'type',
-        'vendor',
         'key',
         'path',
     ];
@@ -21,5 +21,10 @@ class Map extends Model
         return [
             'type' => SourceType::class,
         ];
+    }
+
+    public function vendor(): BelongsTo
+    {
+        return $this->belongsTo(Vendor::class);
     }
 }

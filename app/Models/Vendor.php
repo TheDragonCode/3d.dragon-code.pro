@@ -8,6 +8,7 @@ use App\Casts\SlugCast;
 use App\Events\SluggableEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -39,5 +40,10 @@ class Vendor extends Model
     public function filaments(): Relation
     {
         return $this->hasMany(Filament::class);
+    }
+
+    public function maps(): HasMany
+    {
+        return $this->hasMany(Map::class);
     }
 }

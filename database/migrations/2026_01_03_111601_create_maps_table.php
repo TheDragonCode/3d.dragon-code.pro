@@ -12,12 +12,17 @@ return new class extends Migration {
         Schema::create('maps', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId('vendor_id')->constrained('vendors')->cascadeOnDelete();
+
             $table->string('type');
-            $table->string('vendor');
+
             $table->string('key');
             $table->string('path');
 
             $table->timestamps();
+
+            $table->index(['type', 'key']);
+            $table->unique(['vendor_id', 'type', 'key']);
         });
     }
 };

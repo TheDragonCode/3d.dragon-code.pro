@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\OrcaSlicer;
 
+use App\Concerns\WithVendor;
 use App\Enums\SourceType;
-use App\Models\Map;
+use App\Models\Vendor;
 use Illuminate\Container\Attributes\Config;
 use Illuminate\Container\Attributes\Storage;
 use Illuminate\Filesystem\FilesystemAdapter;
@@ -15,6 +16,8 @@ use SplFileInfo;
 
 class MapService
 {
+    use WithVendor;
+
     public function __construct(
         #[Storage('orca_slicer')]
         protected FilesystemAdapter $storage,
@@ -39,42 +42,58 @@ class MapService
                 $file->getRealPath()
             );
 
+            $vendor = $this->vendor(
+                $profile['name']
+            );
+
             $profileName = $this->profileName($file);
 
             $this->machines(
+                $vendor,
                 $profileName,
-                $profile['name'],
                 $profile['machine_model_list']
             );
 
             $this->filaments(
+                $vendor,
                 $profileName,
-                $profile['name'],
                 $profile['filament_list']
+            );
+
+            $this->processes(
+                $vendor,
+                $profileName,
+                $profile['process_list']
             );
         }
     }
 
-    protected function machines(string $profile, string $vendor, array $machines): void
+    protected function machines(Vendor $vendor, string $profile, array $machines): void
     {
         foreach ($machines as $machine) {
-            $this->store(SourceType::Machine, $profile, $vendor, $machine['name'], $machine['sub_path']);
+            $this->store(SourceType::Machine, $vendor, $profile, $machine['name'], $machine['sub_path']);
         }
     }
 
-    protected function filaments(string $profile, string $vendor, array $filaments): void
+    protected function filaments(Vendor $vendor, string $profile, array $filaments): void
     {
         foreach ($filaments as $filament) {
-            $this->store(SourceType::Filament, $profile, $vendor, $filament['name'], $filament['sub_path']);
+            $this->store(SourceType::Filament, $vendor, $profile, $filament['name'], $filament['sub_path']);
         }
     }
 
-    protected function store(SourceType $type, string $profile, string $vendor, string $name, string $path): void
+    protected function processes(Vendor $vendor, string $profile, array $processes): void
     {
-        Map::updateOrCreate([
-            'type'   => $type,
-            'vendor' => $vendor,
-            'key'    => $name,
+        foreach ($processes as $process) {
+            $this->store(SourceType::Process, $vendor, $profile, $process['name'], $process['sub_path']);
+        }
+    }
+
+    protected function store(SourceType $type, Vendor $vendor, string $profile, string $name, string $path): void
+    {
+        $vendor->maps()->updateOrCreate([
+            'type' => $type,
+            'key'  => $name,
         ], [
             'path' => $profile . '/' . $path,
         ]);
