@@ -20,7 +20,7 @@ class HomeService
             ->with('vendor')
             ->orderBy('vendor_id')
             ->orderBy('title')
-            ->get(['id', 'title', 'vendor_id']);
+            ->get(['id', 'title', 'cover', 'vendor_id']);
     }
 
     public function filamentTypes(): Collection
