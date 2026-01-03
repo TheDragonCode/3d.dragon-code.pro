@@ -64,22 +64,25 @@ export default function Welcome({ userFilaments, machines, filamentTypes, colors
                                             Color
                                         </th>
                                         <th className="border border-gray-300 p-3 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">
-                                            Pressure Advance
+                                            Average Pressure Advance
                                         </th>
                                         <th className="border border-gray-300 p-3 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">
-                                            Flow Ratio
+                                            Average Flow Ratio
                                         </th>
                                         <th className="border border-gray-300 p-3 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">
-                                            Max Volumetric Speed
+                                            Average Max Volumetric Speed
                                         </th>
                                         <th className="border border-gray-300 p-3 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">
-                                            Nozzle Temperature
+                                            Average Nozzle Temperature
+                                        </th>
+                                        <th className="border border-gray-300 p-3 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">
+                                            User Profiles
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     { userFilaments.map((item) => (
-                                            <tr key={ item.id }>
+                                            <tr>
                                                 <td className="border border-gray-300 p-3 text-left text-gray-900 dark:border-gray-600 dark:text-gray-200">
                                                     { item.machine.vendor.title }&nbsp;
                                                     { item.machine.title }
@@ -102,6 +105,9 @@ export default function Welcome({ userFilaments, machines, filamentTypes, colors
                                                 </td>
                                                 <td className="border border-gray-300 p-3 text-left text-gray-900 dark:border-gray-600 dark:text-gray-200">
                                                     { item.nozzle_temperature }
+                                                </td>
+                                                <td className="border border-gray-300 p-3 text-left text-gray-900 dark:border-gray-600 dark:text-gray-200">
+                                                    { item.users_count }
                                                 </td>
                                             </tr>
                                     )) }
