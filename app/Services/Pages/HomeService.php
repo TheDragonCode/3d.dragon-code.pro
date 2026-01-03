@@ -35,12 +35,22 @@ class HomeService
         return Color::query()
             ->whereHas('userFilament')
             ->orderBy('title')
-            ->get(['title', 'hex']);
+            ->get(['id', 'title', 'hex']);
     }
 
-    public function userFilaments(): Collection
+    public function userFilaments(int $count = 100): Collection
     {
         return UserFilament::query()
+            ->select([
+                'machine_id',
+                'filament_id',
+                'color_id',
+            ])
+            ->selectRaw('count(*) as users_count')
+            ->selectRaw('avg(pressure_advance) as pressure_advance')
+            ->selectRaw('avg(filament_flow_ratio) as filament_flow_ratio')
+            ->selectRaw('avg(filament_max_volumetric_speed) as filament_max_volumetric_speed')
+            ->selectRaw('avg(nozzle_temperature) as nozzle_temperature')
             ->with([
                 'machine.vendor',
                 'filament' => ['vendor', 'type'],
@@ -49,7 +59,8 @@ class HomeService
             ->orderBy('machine_id')
             ->orderBy('filament_id')
             ->orderBy('color_id')
-            ->orderBy('id')
+            ->groupBy(['machine_id', 'filament_id', 'color_id'])
+            ->limit($count)
             ->get();
     }
 }
