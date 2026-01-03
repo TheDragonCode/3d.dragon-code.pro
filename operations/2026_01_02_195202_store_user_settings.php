@@ -2,15 +2,20 @@
 
 declare(strict_types=1);
 
+use App\Concerns\WithColor;
+use App\Concerns\WithFilaments;
+use App\Concerns\WithVendor;
 use App\Models\Color;
 use App\Models\Filament;
-use App\Models\FilamentType;
 use App\Models\Machine;
 use App\Models\User;
-use App\Models\Vendor;
 use DragonCode\LaravelDeployOperations\Operation;
 
 return new class extends Operation {
+    use WithVendor;
+    use WithFilaments;
+    use WithColor;
+
     protected array $items = [
         [
             'vendor' => 'Bambulab',
@@ -172,12 +177,6 @@ return new class extends Operation {
 
     protected ?Machine $machine;
 
-    protected array $filaments = [];
-
-    protected array $filamentTypes = [];
-
-    protected array $vendors = [];
-
     protected array $colors = [];
 
     public function __invoke(): void
@@ -225,33 +224,5 @@ return new class extends Operation {
     protected function machine(): Machine
     {
         return $this->machine ??= Machine::firstWhere('slug', 'k1-max');
-    }
-
-    protected function vendor(string $name): Vendor
-    {
-        return $this->vendors[$name] ??= Vendor::firstOrCreate(['title' => $name]);
-    }
-
-    protected function filament(Vendor $vendor, FilamentType $type): Filament
-    {
-        $key = $vendor->id . '-' . $type->id;
-
-        return $this->filaments[$key] ??= Filament::firstOrCreate([
-            'vendor_id'        => $vendor->id,
-            'filament_type_id' => $type->id,
-        ], [
-            'external_id' => $key,
-            'title'       => $vendor->title . ' ' . $type->title,
-        ]);
-    }
-
-    protected function filamentType(string $name): FilamentType
-    {
-        return $this->filamentTypes[$name] ??= FilamentType::firstOrCreate(['title' => $name]);
-    }
-
-    protected function color(string $name): Color
-    {
-        return $this->colors[$name] ??= Color::firstWhere('title', $name);
     }
 };
