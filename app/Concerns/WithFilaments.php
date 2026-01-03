@@ -21,7 +21,7 @@ trait WithFilaments
     protected function filamentTypeNormalize(string $value): string
     {
         return Str::of($value)
-            ->replace(['Generic', 'Value'], '')
+            ->replace(['Generic', 'Value'], '', false)
             ->replace(['High Speed', '@HS', ' HS'], '-HS', false)
             ->replace(['High Flow', '@HF', ' HF'], '-HF', false)
             ->replace(' plus', '+', false)
@@ -29,11 +29,12 @@ trait WithFilaments
             ->replace('-wood', ' Wood', false)
             ->before('@')
             ->squish()
-            ->match('/([^\d][A-Z]{2,4}[+\-\s]?([A-Z]{2,4}|Silk|Wood)?)/')
+            ->upper()
+            ->match('/([^\d][A-Z0-9]{2,5}[+\-\s]?([A-Z0-9]{2,4}|SILK|WOOD)?)/')
             ->replace(' CF', '-CF', false)
             ->squish()
             ->trim('-')
-            ->replaceMatches('/([A-Z]{2})[\s-]?([A-Z]{3,})/', '$2-$1')
+            ->replaceMatches('/([A-Z0-9]{2})[\s-]?([A-Z0-9]{3,})/', '$2-$1')
             ->toString();
     }
 }
