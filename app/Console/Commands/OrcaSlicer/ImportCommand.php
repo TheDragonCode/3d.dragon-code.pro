@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\OrcaSlicer;
 
+use App\Models\FilamentType;
 use App\Services\OrcaSlicer\DownloadService;
 use App\Services\OrcaSlicer\FilamentTypeService;
 use App\Services\OrcaSlicer\MapService;
@@ -28,6 +29,7 @@ class ImportCommand extends Command
         //$this->components->task('Release', fn () => $download->release());
         //$this->components->task('Import map', fn () => $map->import());
         //$this->components->task('Import nozzles', fn () => $nozzle->import());
+        FilamentType::truncate();
         $this->components->task('Import filament types', fn () => $filamentType->import());
     }
 }
