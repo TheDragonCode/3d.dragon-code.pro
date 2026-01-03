@@ -6,6 +6,7 @@ namespace App\Services\OrcaSlicer;
 
 use App\Enums\SourceType;
 use App\Models\Map;
+use Illuminate\Support\Str;
 
 class MachineService
 {
@@ -22,7 +23,7 @@ class MachineService
     protected function store(Map $map): void
     {
         $map->vendor->machines()->updateOrCreate([
-            'title' => $map->vendor->title,
+            'title' => Str::of($map->key)->after($map->vendor->title)->trim()->value(),
         ], [
             'cover' => $this->url($map->profile, $map->key),
         ]);
