@@ -4,6 +4,7 @@ import { type ChangeEvent, useEffect, useState } from 'react';
 type Machine = {
     id: number;
     title: string;
+    cover: string;
     vendor: {
         title: string;
     };
@@ -76,11 +77,15 @@ export default function Welcome({ userFilaments, machines, filamentTypes, colors
 
     return (
             <>
-                <Head title="Welcome" />
+                <Head title="3D Printing Settings" />
                 <div className="flex min-h-screen flex-col items-center bg-[#EDEDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
                     <div className="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
                         <main className="flex w-full flex-col-reverse lg:max-w-4xl lg:flex-row">
                             <div className="w-full">
+                                <h1 className="mb-4 text-3xl">
+                                    3D Printing Settings
+                                </h1>
+
                                 <table className="w-full border-collapse border border-gray-400 bg-white text-sm dark:border-gray-500 dark:bg-gray-800 mb-4">
                                     <thead>
                                     <tr>
