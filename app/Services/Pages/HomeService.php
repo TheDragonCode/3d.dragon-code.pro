@@ -8,6 +8,7 @@ use App\Models\Color;
 use App\Models\FilamentType;
 use App\Models\Machine;
 use App\Models\UserFilament;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class HomeService
@@ -38,7 +39,7 @@ class HomeService
             ->get(['id', 'title', 'hex']);
     }
 
-    public function userFilaments(int $count = 100): Collection
+    public function userFilaments(int $machineId, int $filamentTypeId, int $colorId, int $count = 100): Collection
     {
         return UserFilament::query()
             ->select([
@@ -51,6 +52,11 @@ class HomeService
             ->selectRaw('avg(filament_flow_ratio) as filament_flow_ratio')
             ->selectRaw('avg(filament_max_volumetric_speed) as filament_max_volumetric_speed')
             ->selectRaw('avg(nozzle_temperature) as nozzle_temperature')
+            ->when($machineId, fn (Builder $builder) => $builder->where('machine_id', $machineId))
+            ->when($colorId, fn (Builder $builder) => $builder->where('color_id', $colorId))
+            ->when($filamentTypeId, fn (Builder $builder) => $builder
+                ->whereRelation('filament', 'filament_type_id', $filamentTypeId)
+            )
             ->with([
                 'machine.vendor',
                 'filament' => ['vendor', 'type'],
