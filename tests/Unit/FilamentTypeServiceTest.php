@@ -97,6 +97,13 @@ class FilamentTypeServiceTest extends TestCase
             ['Panchroma PLA Temp Shift @base', 'PLA Temp Shift'],
             ['Panchroma PLA Translucent @base', 'PLA Translucent'],
 
+            ['eSUN PLA+ @base', 'PLA+'],
+            ['SUNLU PLA Marble @base', 'PLA Marble'],
+            ['SUNLU PLA Matte @base', 'PLA Matte'],
+            ['SUNLU PLA+ 2.0 @base', 'PLA+'],
+            ['SUNLU Silk PLA+ @base', 'PLA+ Silk'],
+            ['SUNLU Wood PLA @base', 'PLA Wood'],
+
             ['Unknown profile string', null],
         ];
     }
