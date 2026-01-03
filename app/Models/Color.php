@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Casts\HexCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Color extends Model
@@ -23,5 +24,10 @@ class Color extends Model
         return [
             'hex' => HexCast::class,
         ];
+    }
+
+    public function userFilament(): HasMany
+    {
+        return $this->hasMany(UserFilament::class);
     }
 }

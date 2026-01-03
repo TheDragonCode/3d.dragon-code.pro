@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Casts\FilamentTypeTitleCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FilamentType extends Model
@@ -17,10 +17,15 @@ class FilamentType extends Model
         'title',
     ];
 
-    protected function casts(): array
+    public function userFilaments(): HasManyThrough
     {
-        return [
-            'title' => FilamentTypeTitleCast::class,
-        ];
+        return $this->hasManyThrough(
+            UserFilament::class,
+            Filament::class,
+            'filament_type_id',
+            'filament_id',
+            'id',
+            'id'
+        );
     }
 }
