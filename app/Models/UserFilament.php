@@ -43,21 +43,21 @@ class UserFilament extends Pivot
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function machine(): BelongsTo
     {
-        return $this->belongsTo(Machine::class);
+        return $this->belongsTo(Machine::class, 'machine_id', 'id');
     }
 
     public function filament(): BelongsTo
     {
-        return $this->belongsTo(Filament::class);
+        return $this->belongsTo(Filament::class, 'filament_id', 'id');
     }
 
     public function color(): BelongsTo
     {
-        return $this->belongsTo(Color::class);
+        return $this->belongsTo(Color::class, 'color_id', 'id');
     }
 }
