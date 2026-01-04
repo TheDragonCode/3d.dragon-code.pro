@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\OrcaSlicer;
 
 use App\Services\OrcaSlicer\DownloadService;
-use App\Services\OrcaSlicer\FilamentTypeAAAAAService;
+use App\Services\OrcaSlicer\FilamentService;
 use App\Services\OrcaSlicer\FilamentTypeService;
 use App\Services\OrcaSlicer\MachineService;
 use App\Services\OrcaSlicer\MapService;
@@ -24,7 +24,7 @@ class ImportCommand extends Command
         MachineService $machine,
         NozzleService $nozzle,
         FilamentTypeService $type,
-        FilamentTypeAAAAAService $filament,
+        FilamentService $filament,
     ): void {
         //$this->components->task('Clean up', fn () => $download->cleanup());
         //$this->components->task('Download', fn () => $download->download());

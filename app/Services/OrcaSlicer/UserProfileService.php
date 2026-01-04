@@ -16,8 +16,8 @@ class UserProfileService
     use WithColor;
 
     public function __construct(
-        protected FilamentService $filament,
-        protected FilamentTypeAAAAAService $filamentType,
+        protected FilamentProfileService $filament,
+        protected FilamentService $filamentType,
     ) {}
 
     public function import(User $user, Machine $machine, FilamentData $profile): void

@@ -4,81 +4,52 @@ declare(strict_types=1);
 
 namespace App\Services\OrcaSlicer;
 
-use App\Data\OrcaSlicer\FilamentData;
+use App\Concerns\WithFilaments;
 use App\Enums\SourceType;
+use App\Models\Filament;
 use App\Models\Map;
-use Illuminate\Container\Attributes\Config;
-use Illuminate\Container\Attributes\Storage;
-use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Str;
 
 class FilamentService
 {
-    public function __construct(
-        #[Storage('orca_slicer')]
-        protected FilesystemAdapter $storage,
-        #[Config('orca_slicer.directory')]
-        protected string $directory,
-    ) {}
+    use WithFilaments;
 
-    public function get(FilamentData $filament): FilamentData
+    public function import(): void
     {
-        if (! $filament->inherits) {
-            return $filament;
-        }
-
-        $profile = $this->profile($filament->inherits);
-        $content = $this->perform($profile, $filament->inherits);
-
-        $source = $filament->toArray();
-
-        $source['filament_settings_id'] = $filament->externalId;
-
-        return FilamentData::from(
-            array_merge($this->clean($content), $this->clean($source))
-        );
-    }
-
-    protected function perform(string $profile, string $key, array $values = []): array
-    {
-        if (! $path = $this->findPath($profile, $key)) {
-            return $values;
-        }
-
-        $content = $this->clean(
-            $this->read($path)
-        );
-
-        if (! $parent = $content['inherits'] ?? null) {
-            return array_merge($content, $values);
-        }
-
-        return $this->perform($profile, $parent, array_merge($content, $values));
-    }
-
-    protected function findPath(string $profile, string $key): ?string
-    {
-        return Map::query()
+        Map::query()
             ->where('type', SourceType::Filament)
-            ->where('profile', $profile)
-            ->where('key', $key)
-            ->first()?->path;
+            ->each(fn (Map $map) => $this->store($map));
     }
 
-    protected function profile(string $key): string
+    protected function store(Map $map): void
     {
-        return Str::before($key, ' ');
+        $typeId = $this->detect($map->key, $map->path);
+
+        Filament::updateOrCreate([
+            'vendor_id'        => $map->vendor_id,
+            'filament_type_id' => $typeId,
+        ]);
     }
 
-    protected function read(string $filename): array
+    public function detect(string $key, string $path): int
     {
-        return $this->storage->json(
-            $this->directory . '/resources/profiles/' . $filename
-        );
+        $value = $this->prepare($key, $path);
+
+        foreach ($this->getFilamentTypes() as $type) {
+            if (Str::contains($value, $type->title)) {
+                return $type->id;
+            }
+        }
+
+        return $this->getFilamentTypes()->get('Unknown')->id;
     }
 
-    protected function clean(array $values): array
+    protected function prepare(string $key, string $path): string
     {
-        return array_filter($values);
+        return Str::of($key)
+            ->append(' ', $path)
+            ->replace(['@HS', '@HF'], ' HS')
+            ->replace('@', ' ')
+            ->toString();
     }
 }
