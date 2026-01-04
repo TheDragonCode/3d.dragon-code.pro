@@ -4,9 +4,9 @@ namespace App\Data\OrcaSlicer;
 
 use App\Data\Casts\ArrayToFloatCast;
 use App\Data\Casts\ArrayToIntegerCast;
+use App\Data\Casts\ArrayToStringCast;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
-use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
@@ -16,13 +16,14 @@ class FilamentData extends Data
 {
     public function __construct(
         #[MapInputName('filament_settings_id')]
-        #[MapOutputName('external_id')]
-        public string $settingsId,
+        #[WithCast(ArrayToStringCast::class)]
+        public string $externalId,
 
         #[MapInputName('default_filament_colour')]
-        public ?string $color = null,
+        #[WithCast(ArrayToStringCast::class)]
+        public string $color,
 
-        public ?string $inherits = null,
+        public string $inherits,
 
         #[WithCast(ArrayToFloatCast::class)]
         public float $pressureAdvance = 0,
