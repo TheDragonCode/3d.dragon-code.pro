@@ -59,15 +59,15 @@ class MapService
 
         $vendor = $this->vendor($profile);
 
-        $item = $map->replicate()->fill([
+        $map->replicate()->fill([
             'parent_id' => $map->id,
             'vendor_id' => $vendor->id,
             'profile'   => $profile,
         ]);
 
-        if ($item->doesntExist()) {
-            $item->save();
-        }
+        Map::insertOrIgnore(
+            $map->toArray(),
+        );
     }
 
     protected function machines(Vendor $vendor, string $profile, array $machines): void
