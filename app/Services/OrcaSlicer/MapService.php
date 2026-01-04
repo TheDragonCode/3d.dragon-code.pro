@@ -6,65 +6,67 @@ namespace App\Services\OrcaSlicer;
 
 use App\Concerns\WithVendor;
 use App\Enums\SourceType;
+use App\Models\Map;
 use App\Models\Vendor;
 use Illuminate\Container\Attributes\Config;
 use Illuminate\Container\Attributes\Storage;
 use Illuminate\Filesystem\FilesystemAdapter;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
-use SplFileInfo;
 
 class MapService
 {
     use WithVendor;
 
     public function __construct(
-        #[Storage('orca_slicer')]
+        #[Storage('orca_resources')]
         protected FilesystemAdapter $storage,
-        #[Config('orca_slicer.source')]
-        protected string $source,
-        #[Config('orca_slicer.archive')]
-        protected string $archive,
-        #[Config('orca_slicer.directory')]
-        protected string $directory,
         #[Config('orca_slicer.except_files')]
         protected array $exceptFiles,
     ) {}
 
     public function import(): void
     {
-        foreach ($this->profiles() as $file) {
-            if ($this->skip($file)) {
+        foreach ($this->profiles() as $filename) {
+            if ($this->skip($filename)) {
                 continue;
             }
 
-            $profile = $this->load(
-                $file->getRealPath()
-            );
+            $profile = $this->load($filename);
 
             $vendor = $this->vendor(
                 $profile['name']
             );
 
-            $profileName = $this->profileName($file);
+            $name = $this->profileName($filename);
 
-            $this->machines(
-                $vendor,
-                $profileName,
-                $profile['machine_model_list']
-            );
+            $this->machines($vendor, $name, $profile['machine_model_list']);
+            $this->filaments($vendor, $name, $profile['filament_list']);
+            $this->processes($vendor, $name, $profile['process_list']);
+        }
+    }
 
-            $this->filaments(
-                $vendor,
-                $profileName,
-                $profile['filament_list']
-            );
+    public function importSubFilaments(): void
+    {
+        Map::query()
+            ->where('type', SourceType::Filament)
+            ->whereRaw('(LENGTH("path") - LENGTH(REPLACE("path", \'/\', \'\'))) = 3')
+            ->get()
+            ->each(fn (Map $map) => $this->subFilament($map));
+    }
 
-            $this->processes(
-                $vendor,
-                $profileName,
-                $profile['process_list']
-            );
+    protected function subFilament(Map $map): void
+    {
+        $profile = explode('/', $map->path)[2];
+
+        $vendor = $this->vendor($profile);
+
+        $item = $map->replicate()->fill([
+            'parent_id' => $map->id,
+            'vendor_id' => $vendor->id,
+            'profile'   => $profile,
+        ]);
+
+        if ($item->doesntExist()) {
+            $item->save();
         }
     }
 
@@ -101,46 +103,29 @@ class MapService
     }
 
     /**
-     * @return SplFileInfo[]
+     * @return string[]
      */
     protected function profiles(): array
     {
-        return File::files(
-            $this->profilesPath()
-        );
+        return $this->storage->files('profiles');
     }
 
-    protected function profileName(SplFileInfo $file): string
+    protected function profileName(string $filename): string
     {
-        $name      = $file->getFilename();
-        $extension = $file->getExtension();
-
-        return Str::before($name, '.' . $extension);
+        return pathinfo($filename, PATHINFO_FILENAME);
     }
 
-    protected function skip(SplFileInfo $file): bool
+    protected function skip(string $filename): bool
     {
-        if ($file->getExtension() !== 'json') {
+        if (pathinfo($filename, PATHINFO_EXTENSION) !== 'json') {
             return true;
         }
 
-        return in_array($file->getFilename(), $this->exceptFiles, true);
+        return in_array(pathinfo($filename, PATHINFO_BASENAME), $this->exceptFiles, true);
     }
 
-    protected function load(string $path): array
+    protected function load(string $filename): array
     {
-        return json_decode(file_get_contents($path), true);
-    }
-
-    protected function profilesPath(): string
-    {
-        return $this->path('resources/profiles');
-    }
-
-    protected function path(string $filename): string
-    {
-        return $this->storage->path(
-            $this->directory . DIRECTORY_SEPARATOR . $filename
-        );
+        return $this->storage->json($filename);
     }
 }
