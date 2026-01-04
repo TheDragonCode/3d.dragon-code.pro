@@ -17,7 +17,7 @@ class UserProfileService
 
     public function __construct(
         protected FilamentService $filament,
-        protected FilamentTypeService $filamentType,
+        protected FilamentTypeAAAAAService $filamentType,
     ) {}
 
     public function import(User $user, Machine $machine, FilamentData $profile): void

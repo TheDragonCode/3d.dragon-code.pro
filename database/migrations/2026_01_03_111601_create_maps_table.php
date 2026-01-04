@@ -13,10 +13,12 @@ return new class extends Migration {
             $table->id();
 
             $table->foreignId('vendor_id')->constrained('vendors')->cascadeOnDelete();
+            $table->foreignId('parent_id')->nullable()->constrained('maps')->cascadeOnDelete();
 
             $table->string('type');
 
             $table->string('profile');
+
             $table->string('key');
             $table->string('path');
 
