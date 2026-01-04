@@ -26,10 +26,10 @@ class ImportCommand extends Command
         FilamentTypeService $type,
         FilamentService $filament,
     ): void {
-        //$this->components->task('Clean up', fn () => $download->cleanup());
-        //$this->components->task('Download', fn () => $download->download());
-        //$this->components->task('Extract', fn () => $download->extract());
-        //$this->components->task('Release', fn () => $download->release());
+        $this->components->task('Clean up', fn () => $download->cleanup());
+        $this->components->task('Download', fn () => $download->download());
+        $this->components->task('Extract', fn () => $download->extract());
+        $this->components->task('Release', fn () => $download->release());
 
         $this->components->task('Import profile maps', fn () => $map->import());
         $this->components->task('Import sub filament maps', fn () => $map->importSubFilaments());
