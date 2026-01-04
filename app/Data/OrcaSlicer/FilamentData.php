@@ -19,13 +19,13 @@ class FilamentData extends Data
         #[WithCast(ArrayToStringCast::class)]
         public string $externalId,
 
-        #[MapInputName('default_filament_colour')]
-        #[WithCast(ArrayToStringCast::class)]
-        public string $color,
-
         public string $name,
 
         public string $inherits,
+
+        #[MapInputName('default_filament_colour')]
+        #[WithCast(ArrayToStringCast::class)]
+        public string $color = '#000000',
 
         #[WithCast(ArrayToFloatCast::class)]
         public float $pressureAdvance = 0,
