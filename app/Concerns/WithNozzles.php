@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Concerns;
 
 use App\Models\Nozzle;
+use Illuminate\Support\Str;
 
 trait WithNozzles
 {

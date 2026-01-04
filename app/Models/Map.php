@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 class Map extends Model
 {
     protected $fillable = [
+        'parent_id',
         'vendor_id',
 
         'type',
