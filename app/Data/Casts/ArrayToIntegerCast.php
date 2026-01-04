@@ -11,7 +11,7 @@ use function is_array;
 
 class ArrayToIntegerCast implements Cast
 {
-    public function cast(DataProperty $property, mixed $value, array $properties, CreationContext $context): mixed
+    public function cast(DataProperty $property, mixed $value, array $properties, CreationContext $context): int
     {
         if (is_array($value)) {
             return (int) array_first($value);

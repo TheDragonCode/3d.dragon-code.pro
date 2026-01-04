@@ -28,3 +28,4 @@ yarn-error.log
 /.junie
 /.ai
 /.output.txt
+/routes/playground.php
