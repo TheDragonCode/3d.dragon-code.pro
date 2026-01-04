@@ -5,17 +5,12 @@ declare(strict_types=1);
 namespace App\Services\OrcaSlicer;
 
 use App\Data\OrcaSlicer\FilamentData;
-use App\Exceptions\FilamentProfileNotFoundException;
+use App\Enums\SourceType;
+use App\Models\Map;
 use Illuminate\Container\Attributes\Config;
 use Illuminate\Container\Attributes\Storage;
 use Illuminate\Filesystem\FilesystemAdapter;
-
-use function array_merge;
-use function file_exists;
-use function file_get_contents;
-use function implode;
-use function json_decode;
-use function report;
+use Illuminate\Support\Str;
 
 class FilamentService
 {
@@ -23,55 +18,29 @@ class FilamentService
         #[Storage('orca_slicer')]
         protected FilesystemAdapter $storage,
         #[Config('orca_slicer.directory')]
-        protected string $directory
+        protected string $directory,
     ) {}
 
-    public function get(string $vendor, string $profile, array $meta): ?FilamentData
+    public function get(FilamentData $filament): FilamentData {}
+
+    protected function findPath(string $profile, string $key): ?string
     {
-        if (! $parameters = $this->parameters($vendor, $profile)) {
-            return null;
-        }
-
-        $parameters['machine'] = $profile;
-        $parameters['meta']    = $meta;
-
-        return FilamentData::from($parameters);
+        return Map::query()
+            ->where('type', SourceType::Filament)
+            ->where('profile', $profile)
+            ->where('key', $key)
+            ->first()?->path;
     }
 
-    protected function parameters(string $vendor, string $profile): array
+    protected function profile(string $key): string
     {
-        $parameters = $this->load($vendor, $profile);
-
-        if (! $parent = $parameters['inherits'] ?? false) {
-            return $parameters;
-        }
-
-        $previous = $this->parameters($vendor, $parent);
-
-        return array_merge($previous, $parameters);
+        return Str::before($key, ' ');
     }
 
-    protected function load(string $vendor, string $profile): array
+    protected function read(string $filename): array
     {
-        $path = $this->path($vendor, $profile);
-
-        if (! file_exists($path)) {
-            report(new FilamentProfileNotFoundException($vendor, $profile, $path));
-
-            return [];
-        }
-
-        return json_decode(file_get_contents($this->path($vendor, $profile)), true);
-    }
-
-    protected function path(string $vendor, string $profile): string
-    {
-        return $this->storage->path(implode(DIRECTORY_SEPARATOR, [
-            $this->directory,
-            'resources/profiles',
-            $vendor,
-            'filament',
-            $profile . '.json',
-        ]));
+        return $this->storage->json(
+            $this->directory . '/resources/profiles/' . $filename
+        );
     }
 }
