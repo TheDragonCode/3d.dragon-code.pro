@@ -23,6 +23,8 @@ class FilamentData extends Data
         #[WithCast(ArrayToStringCast::class)]
         public string $color,
 
+        public string $name,
+
         public string $inherits,
 
         #[WithCast(ArrayToFloatCast::class)]
