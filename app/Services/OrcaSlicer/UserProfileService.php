@@ -22,9 +22,9 @@ class UserProfileService
 
     public function import(User $user, Machine $machine, FilamentData $profile): void
     {
-        $vendor = $this->vendor($profile->inherits);
+        $vendor = $this->vendor($profile);
 
-        $filament = $this->filament($vendor, $profile->inherits);
+        $filament = $this->filament($vendor, $profile->inherits ?: $profile->externalId);
         $color    = $this->color($profile->color);
 
         $content = $this->filament->get($profile)->toArray();
@@ -48,8 +48,8 @@ class UserProfileService
             ->firstOrFail();
     }
 
-    protected function vendor(string $name): string
+    protected function vendor(FilamentData $filament): string
     {
-        return Str::of($name)->before(' ')->trim()->toString();
+        return Str::of($filament->inherits ?: $filament->externalId)->before(' ')->trim()->toString();
     }
 }

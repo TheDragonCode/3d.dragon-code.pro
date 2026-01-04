@@ -156,6 +156,7 @@ class FilamentTypeService
             ->replaceMatches('/(FLEX\d+)/', '')
             ->replaceMatches('/^\s*([STJ]\d+)/', '')
             ->replaceMatches('/(\d+\.\d+[m]*)/', '')
+            ->replaceMatches('/([A-Z]*\d{3,}[A-Z]*)/', '')
             ->replace(['/', '+', '_'], ['-', '+ ', ' '])
             ->squish()
             ->trim('-_ ')
