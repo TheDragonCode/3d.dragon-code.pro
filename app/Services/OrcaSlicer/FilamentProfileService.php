@@ -7,18 +7,16 @@ namespace App\Services\OrcaSlicer;
 use App\Data\OrcaSlicer\FilamentData;
 use App\Enums\SourceType;
 use App\Models\Map;
-use Illuminate\Container\Attributes\Config;
 use Illuminate\Container\Attributes\Storage;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Str;
 
 class FilamentProfileService
 {
     public function __construct(
-        #[Storage('orca_slicer')]
+        #[Storage('orca_resources')]
         protected FilesystemAdapter $storage,
-        #[Config('orca_slicer.directory')]
-        protected string $directory,
     ) {}
 
     public function get(FilamentData $filament): FilamentData
@@ -60,8 +58,12 @@ class FilamentProfileService
     {
         return Map::query()
             ->where('type', SourceType::Filament)
-            ->where('profile', $profile)
             ->where('key', $key)
+            ->where(fn (Builder $builder) => $builder
+                ->whereRelation('parent', 'profile', $profile)
+                ->orwhere('profile', $profile)
+            )
+            ->orderByDesc('parent_id')
             ->first()?->path;
     }
 
@@ -73,7 +75,7 @@ class FilamentProfileService
     protected function read(string $filename): array
     {
         return $this->storage->json(
-            $this->directory . '/resources/profiles/' . $filename
+            'profiles/' . $filename
         );
     }
 
