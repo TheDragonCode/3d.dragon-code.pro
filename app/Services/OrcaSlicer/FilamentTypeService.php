@@ -125,7 +125,7 @@ class FilamentTypeService
         ]);
     }
 
-    protected function detect(string $vendor, string $filament, string $path): string
+    public function detect(string $vendor, string $filament, string $path): string
     {
         return Str::of($filament)
             ->when(
