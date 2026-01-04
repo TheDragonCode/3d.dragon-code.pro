@@ -6,6 +6,7 @@ namespace App\Services\OrcaSlicer;
 
 use App\Concerns\WithColor;
 use App\Data\OrcaSlicer\FilamentData;
+use App\Exceptions\UserFilamentNotFoundException;
 use App\Models\Filament;
 use App\Models\Machine;
 use App\Models\User;
@@ -24,8 +25,17 @@ class UserProfileService
     {
         $vendor = $this->vendor($profile);
 
-        $filament = $this->filament($vendor, $profile->inherits ?: $profile->externalId);
-        $color    = $this->color($profile->color);
+        $value = $profile->inherits ?: $profile->externalId;
+
+        $filament = $this->filament($vendor, $value);
+
+        if (! $filament) {
+            report(new UserFilamentNotFoundException($vendor, $value));
+
+            return;
+        }
+
+        $color = $this->color($profile->color);
 
         $content = $this->filament->get($profile)->toArray();
 
@@ -36,20 +46,20 @@ class UserProfileService
         ], $content);
     }
 
-    protected function filament(string $vendor, string $filament): Filament
+    protected function filament(string $vendor, string $filament): ?Filament
     {
         $path = $vendor . '/filament/' . $filament . '.json';
 
-        $detected = $this->filamentType->detect($vendor, $filament, $path);
+        $typeId = $this->filamentType->detect($filament, $path);
 
         return Filament::query()
             ->whereRelation('vendor', 'title', 'ilike', '%' . $vendor . '%')
-            ->whereRelation('type', 'title', $detected)
-            ->firstOrFail();
+            ->where('filament_type_id', $typeId)
+            ->first();
     }
 
     protected function vendor(FilamentData $filament): string
     {
-        return Str::of($filament->inherits ?: $filament->externalId)->before(' ')->trim()->toString();
+        return Str::of($filament->externalId)->before(' ')->trim()->toString();
     }
 }
