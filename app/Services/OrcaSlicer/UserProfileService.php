@@ -27,7 +27,7 @@ class UserProfileService
         $filament = $this->filament($vendor, $profile->inherits);
         $color    = $this->color($profile->color);
 
-        $content = $profile->toArray();
+        $content = $this->filament->get($profile)->toArray();
 
         $user->userFilaments()->updateOrCreate([
             'machine_id'  => $machine->id,
