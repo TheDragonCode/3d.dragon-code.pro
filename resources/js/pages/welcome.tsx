@@ -172,7 +172,7 @@ export default function Welcome({ userFilaments, machines, filamentTypes, colors
                                             Average Nozzle Temperature
                                         </th>
                                         <th className="border border-gray-300 p-3 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">
-                                            User Profiles
+                                            By User Profiles
                                         </th>
                                     </tr>
                                     </thead>
