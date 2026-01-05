@@ -26,6 +26,5 @@ yarn-error.log
 /.vscode
 /.zed
 /.junie
-/.ai
 /.output.txt
 /routes/playground.php
