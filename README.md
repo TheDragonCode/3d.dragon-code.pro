@@ -62,4 +62,4 @@ Artisan::command('foo', function () {
 
 ## List
 
-[list](.github/images/list.png)
+![list](.github/images/list.png)
