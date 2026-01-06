@@ -26,6 +26,9 @@ jobs:
                 env:
                     TELEGRAM_DEPLOY_TOKEN: ${{ secrets.TELEGRAM_DEPLOY_TOKEN }}
                     TELEGRAM_DEPLOY_CHAT_ID: ${{ secrets.TELEGRAM_DEPLOY_CHAT_ID }}
+                    DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+                    DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
+                    DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
                 with:
                     private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
                     known-hosts: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
