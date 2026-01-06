@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Concerns;
 
 use App\Models\Color;
+use Illuminate\Support\Str;
 
 trait WithColor
 {
@@ -21,9 +22,11 @@ trait WithColor
 
     protected function color(string $name): Color
     {
-        return $this->colors[$name] ??= Color::firstOrCreate([
-            'title' => $name,
-            'hex'   => $this->colorMap[$name] ?? '#000000',
-        ]);
+        return $this->colors[$name] ??= Color::query()
+            ->whereRaw('lower(title) = ?', [Str::lower($name)])
+            ->firstOrCreate(values: [
+                'title' => $name,
+                'hex'   => $this->colorMap[$name] ?? '#000000',
+            ]);
     }
 }

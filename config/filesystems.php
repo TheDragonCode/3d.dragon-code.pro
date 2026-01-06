@@ -57,6 +57,14 @@ return [
             'report' => false,
         ],
 
+        'orca_resources' => [
+            'driver' => 'local',
+            'root'   => storage_path('app/orca_slicer/OrcaSlicer-main/resources'),
+            'serve'  => true,
+            'throw'  => false,
+            'report' => false,
+        ],
+
     ],
 
     /*

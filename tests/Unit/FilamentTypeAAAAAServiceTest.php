@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Services\OrcaSlicer\FilamentTypeService;
+use App\Services\OrcaSlicer\FilamentService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +13,7 @@ class FilamentTypeServiceTest extends TestCase
     #[DataProvider('detectCases')]
     public function testDetect(?string $vendor, string $filament, ?string $expected): void
     {
-        $service = new class extends FilamentTypeService {
+        $service = new class extends FilamentService {
             public function exposedDetect(?string $vendor, string $filament): ?string
             {
                 $path = $vendor . '/filament/' . $filament . '.json';

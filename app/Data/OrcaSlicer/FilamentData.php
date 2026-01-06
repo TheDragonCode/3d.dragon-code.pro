@@ -4,12 +4,9 @@ namespace App\Data\OrcaSlicer;
 
 use App\Data\Casts\ArrayToFloatCast;
 use App\Data\Casts\ArrayToIntegerCast;
-use App\Data\Casts\OrcaSlicer\FilamentMachineCast;
-use App\Data\Casts\OrcaSlicer\FilamentTitleCast;
-use Illuminate\Support\Str;
+use App\Data\Casts\ArrayToStringCast;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
-use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
@@ -18,16 +15,17 @@ use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 class FilamentData extends Data
 {
     public function __construct(
-        #[MapOutputName('external_id')]
-        public string $settingId,
+        #[MapInputName('filament_settings_id')]
+        #[WithCast(ArrayToStringCast::class)]
+        public string $externalId,
 
-        #[MapInputName('name')]
-        #[WithCast(FilamentTitleCast::class)]
-        public string $title,
+        public string $name,
 
-        #[MapInputName('name')]
-        #[WithCast(FilamentMachineCast::class)]
-        public string $machine,
+        public string $inherits,
+
+        #[MapInputName('default_filament_colour')]
+        #[WithCast(ArrayToStringCast::class)]
+        public string $color = '#000000',
 
         #[WithCast(ArrayToFloatCast::class)]
         public float $pressureAdvance = 0,
@@ -42,12 +40,4 @@ class FilamentData extends Data
         #[WithCast(ArrayToIntegerCast::class)]
         public int $nozzleTemperatureInitialLayer = 0,
     ) {}
-
-    public static function prepareForPipeline(array $properties): array
-    {
-        $properties['filament_id'] ??= Str::slug($properties['name']);
-        $properties['setting_id']  ??= $properties['filament_id'];
-
-        return $properties;
-    }
 }
